@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Foto - Voice Member Card</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 20px; }
+    canvas { border: 1px solid #ccc; margin-top: 20px; max-width: 100%; }
+    input[type="file"] { margin: 10px 0; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>Upload Foto (Before)</h2>
+  <input type="file" id="beforeInput" accept="image/*">
+  <br>
+  <button onclick="downloadCard()">Download Card</button>
+  <br>
+  <canvas id="cardCanvas" width="1215" height="453"></canvas>
+
+  <script>
+    const templateImg = new Image();
+    templateImg.src = 'image.png'; // Ganti ini dengan path template kamu setelah hosting
+
+    const canvas = document.getElementById('cardCanvas');
+    const ctx = canvas.getContext('2d');
+
+    templateImg.onload = () => {
+      ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
+    };
+
+    document.getElementById('beforeInput').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function (event) {
+        const beforeImg = new Image();
+        beforeImg.onload = function () {
+          // Clear canvas & draw template again
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
+
+          // Draw BEFORE image ke posisi (perkiraan pixel): x=705, y=120, width=240, height=180
+          ctx.drawImage(beforeImg, 705, 120, 240, 180);
+        };
+        beforeImg.src = event.target.result;
+      };
+
+      if (file) reader.readAsDataURL(file);
+    });
+
+    function downloadCard() {
+      const link = document.createElement('a');
+      link.download = 'voice_member_card.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+  </script>
+</body>
+</html>
