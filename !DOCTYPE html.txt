@@ -21,7 +21,7 @@
 
   <script>
     const templateImg = new Image();
-    templateImg.src = 'image.png'; // Ganti ini dengan path template kamu setelah hosting
+    templateImg.src = '/image.png'; // Ganti ini dengan path template kamu setelah hosting
 
     const canvas = document.getElementById('cardCanvas');
     const ctx = canvas.getContext('2d');
